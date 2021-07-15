@@ -25,11 +25,6 @@
     <label for="phoneNumber">Enter phoneNumber: </label>
     <input type="text" th:field="*{phoneNumber}" id="phoneNumber"/>
     <div style="color:red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{email}">phoneNumber error</div>
-    <br/>
-    <label for="medCard">Enter medCard: </label>
-    <input type="text" th:field="*{medCard}" id="medCard"/>
-    <div style="color:red" th:if="${#fields.hasErrors('medCard')}" th:errors="*{medCard}">medCard error</div>
-    <br/>
     <label for="healthStatus">Enter healthStatus: </label>
     <input type="text" th:field="*{healthStatus}" id="healthStatus"/>
     <div style="color:red" th:if="${#fields.hasErrors('healthStatus')}" th:errors="*{healthStatus}">healthStatus error</div>

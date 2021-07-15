@@ -1,9 +1,9 @@
 package by.it_academy.polyclinic.model;
 
 public enum Role {
-    SUPERADMIN,
-    ADMIN,
-    DOCTOR,
-    USER,
-    GUEST
+    ROLE_SUPERADMIN,
+    ROLE_ADMIN,
+    ROLE_DOCTOR,
+    ROLE_USER,
+    ROLE_GUEST
 }
