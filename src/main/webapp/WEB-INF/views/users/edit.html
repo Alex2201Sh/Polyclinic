@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.whymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+</head>
+<body>
+<form th:method="PATCH" th:action="@{/users/{id}(id=${user.getId()})}" th:object="${user}">
+    <label for="firstName">Enter firstName: </label>
+    <input type="text" th:field="*{firstName}" id="firstName"/>
+    <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">name error</div>
+    <br/>
+    <label for="surname">Enter surname: </label>
+    <input type="text" th:field="*{surname}" id="surname"/>
+    <div style="color:red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">surname error</div>
+    <br/>
+    <label for="email">Enter email: </label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</div>
+    <br/>
+    <label for="address">Enter address: </label>
+    <input type="text" th:field="*{address}" id="address"/>
+    <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">address error</div>
+    <br/>
+    <label for="phoneNumber">Enter phoneNumber: </label>
+    <input type="text" th:field="*{phoneNumber}" id="phoneNumber"/>
+    <div style="color:red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{email}">phoneNumber error</div>
+    <br/>
+    <label for="medCard">Enter medCard: </label>
+    <input type="text" th:field="*{medCard}" id="medCard"/>
+    <div style="color:red" th:if="${#fields.hasErrors('medCard')}" th:errors="*{medCard}">medCard error</div>
+    <br/>
+    <label for="healthStatus">Enter healthStatus: </label>
+    <input type="text" th:field="*{healthStatus}" id="healthStatus"/>
+    <div style="color:red" th:if="${#fields.hasErrors('healthStatus')}" th:errors="*{healthStatus}">healthStatus error</div>
+    <br/>
+    <label for="userRole">Enter userRole: </label>
+    <input type="text" th:field="*{userRole}" id="userRole"/>
+    <div style="color:red" th:if="${#fields.hasErrors('userRole')}" th:errors="*{userRole}">userRole error</div>
+    <br/>
+
+    <input type="submit" value="Update!"/>
+</form>
+</body>
+</html>
