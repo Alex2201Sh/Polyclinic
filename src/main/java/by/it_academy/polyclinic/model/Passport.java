@@ -1,48 +1,49 @@
 package by.it_academy.polyclinic.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import javax.persistence.*;
 
 @Entity(name = "Passport")
-@Table(name = "passports", schema = "polyclinic")
+@Table(name = "passports")
 public class Passport {
 
     @Id
-    @Column(name = "id_number")
-    private String idNumber; //идентификационный номер пасспорта
+    @NotNull
+    private String id; //идентификационный номер пасспорта
 
-    @Column(name = "code_of_issuing_state")
+    @NotEmpty(message = "Name should not be empty")
+    @Size(min = 2, max = 30, message = "Name 2..30 chars")
+    private String firstName;
+
+    private String surname;
+
+    private String address;
+
     private String codeOfIssuingState; //орган выдавший пасспорт
 
-    @Column(name = "passport_number")
     private String passportNumber; // номер пасспорта
 
-    @Column(name = "nationality")
     private String nationality; // национальность
 
-    @Column(name = "birth_date")
     private String birthDate; // дата рождения
 
-    @Column(name = "birth_place")
     private String birthPlace; // место рождения
 
-    @Column(name = "sex")
     private String sex; // пол
 
-    @Column(name = "date_of_issue")
     private String dateOfIssue; // дата выдачи пасспорта
 
-    @Column(name = "date_of_expiry")
     private String dateOfExpiry; //окончание срока действия пасспорта
 
-    public String getIdNumber() {
-        return idNumber;
+    public String getId() {
+        return id;
     }
 
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
+    public void setIdNumber(String id) {
+        this.id = id;
     }
 
     public String getCodeOfIssuingState() {
@@ -109,5 +110,30 @@ public class Passport {
         this.dateOfExpiry = dateOfExpiry;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Passport() {
+    }
 }

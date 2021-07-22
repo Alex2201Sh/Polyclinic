@@ -1,9 +1,13 @@
 package by.it_academy.polyclinic.model;
 
-public enum Role {
-    ROLE_SUPERADMIN,
-    ROLE_ADMIN,
-    ROLE_DOCTOR,
-    ROLE_USER,
-    ROLE_GUEST
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
+
+    ADMIN, DOCTOR, PATIENT, GUEST;
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }

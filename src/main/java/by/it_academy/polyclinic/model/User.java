@@ -1,71 +1,46 @@
 package by.it_academy.polyclinic.model;
 
-import javax.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.Set;
 
 @Entity(name = "User")
-@Table(name = "users", schema = "polyclinic")
-public class User {
+@Table(name = "users")
+public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    @Column(name = "user_role")
-    private String userRole;
+    private String username;
+    private String password;
 
-    public String getUserRole() {
-        return userRole;
-    }
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
-    public void setUserRole(String userRole) {
-        this.userRole = userRole;
-    }
+    @JoinColumn (name="passport_id")
+    private String passportId;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "surname")
-    private String surname;
-
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "med_card")
-    private String medCard;
+    @JoinColumn(name="medical_cards_id")
+    private String medicalCardId;
 
-    @Column(name = "health_status")
-    private String healthStatus;
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public String getEmail() {
@@ -76,14 +51,6 @@ public class User {
         this.email = email;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -92,19 +59,75 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getMedCard() {
-        return medCard;
+    public String getUsername() {
+        return username;
     }
 
-    public void setMedCard(String medCard) {
-        this.medCard = medCard;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public String getHealthStatus() {
-        return healthStatus;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setHealthStatus(String healthStatus) {
-        this.healthStatus = healthStatus;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isAdmin() {
+        return roles.contains(Role.ADMIN);
+    }
+
+    public String getPassportId() {
+        return passportId;
+    }
+
+    public void setPassportId(String passportId) {
+        this.passportId = passportId;
+    }
+
+    public String getMedicalCardId() {
+        return medicalCardId;
+    }
+
+    public void setMedicalCardId(String medicalCardId) {
+        this.medicalCardId = medicalCardId;
+    }
+
+    public User() {
     }
 }

@@ -1,73 +1,73 @@
 package by.it_academy.polyclinic.controller;
 
-import by.it_academy.polyclinic.dao.UserDAO;
+import by.it_academy.polyclinic.model.Role;
 import by.it_academy.polyclinic.model.User;
-import jakarta.validation.Valid;
+import by.it_academy.polyclinic.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
-    private UserDAO userDAO;
-
     @Autowired
-    public UserController(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
+    private UserService userService;
 
-    @GetMapping()
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping
     public String index(Model model) {
-        model.addAttribute("users", userDAO.index());
-        return "users/index";
+        model.addAttribute("users", userService.findAll());
+        return "userList";
     }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userDAO.show(id));
-        return "users/show";
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("{user}")
+    public String userEditForm(@PathVariable User user, Model model) {
+        model.addAttribute("user", user);
+        model.addAttribute("roles", Role.values());
+        return "userEdit";
     }
 
-    @GetMapping("/new")
-    public String newUser(@ModelAttribute("user") User user) {
-        return "users/new";
-    }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public String create(@ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "users/new";
-        }
-        userDAO.save(user);
-        return "redirect:/users";
+    public String userSave(
+            @RequestParam String username,
+            @RequestParam Map<String, String> form,
+            @RequestParam("userId") User user) {
+
+        userService.saveUser(user, username, form);
+        return "redirect:/user";
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("user", userDAO.show(id));
-        return "users/edit";
+    @GetMapping("profile")
+    public String getProfile(Model model, @AuthenticationPrincipal User user) {
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("email", user.getEmail());
+
+        return "profile";
     }
 
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult,
-                         @PathVariable("id") int id) {
-        if (bindingResult.hasErrors()) {
-            return "users/edit";
-        }
-        userDAO.update(id, user);
-        return "redirect:/users";
+    @PostMapping("profile")
+    public String updateProfile(@AuthenticationPrincipal User user,
+                                @RequestParam String password,
+                                @RequestParam String email,
+                                @RequestParam String phoneNumber) {
+
+        userService.updateProfile(user, password, email, phoneNumber);
+        return "redirect:/user/profile";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
-        userDAO.delete(id);
-        return "redirect:/users";
-    }
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PostMapping("profile")
+//    public String delete(@PathVariable("id") Long id) {
+//        userService.delete(id);
+//        return "redirect:/users";
+//    }
 
 }
