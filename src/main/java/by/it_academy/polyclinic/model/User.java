@@ -1,67 +1,46 @@
 package by.it_academy.polyclinic.model;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import by.it_academy.polyclinic.model.enumeration.Role;
+import jakarta.validation.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Set;
+import java.util.Collections;
+import java.util.Objects;
 
 @Entity(name = "User")
 @Table(name = "users")
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    private Role role;
 
-    @JoinColumn (name="passport_id")
-    private String passportId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "passport_id", foreignKey = @ForeignKey(name = "FK_user_passport_id"))
+    private Passport passport;
 
+    @Email
+    @Column(name = "email", unique = true, nullable = true)
     private String email;
 
+    @Column(name = "phone_no", unique = true)
     private String phoneNumber;
 
-    @JoinColumn(name="medical_cards_id")
-    private String medicalCardId;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getUsername() {
-        return username;
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "medical_card_id", foreignKey = @ForeignKey(name = "FK_user_medical_card_id"))
+    private MedicalCard medicalCard;
 
     @Override
     public boolean isAccountNonExpired() {
@@ -83,15 +62,29 @@ public class User implements UserDetails {
         return true;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(getRole());
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
-    }
-
     public String getPassword() {
         return password;
     }
@@ -100,34 +93,79 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Passport getPassport() {
+        return passport;
+    }
+
+    public void setPassport(Passport passport) {
+        this.passport = passport;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public MedicalCard getMedicalCard() {
+        return medicalCard;
+    }
+
+    public void setMedicalCard(MedicalCard medicalCard) {
+        this.medicalCard = medicalCard;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", passport=" + passport +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", medicalCard=" + medicalCard +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public boolean isAdmin() {
-        return roles.contains(Role.ADMIN);
+        return role.equals(Role.ADMIN);
     }
 
-    public String getPassportId() {
-        return passportId;
-    }
-
-    public void setPassportId(String passportId) {
-        this.passportId = passportId;
-    }
-
-    public String getMedicalCardId() {
-        return medicalCardId;
-    }
-
-    public void setMedicalCardId(String medicalCardId) {
-        this.medicalCardId = medicalCardId;
-    }
-
-    public User() {
+    public boolean isUserHasPassport(User user) {
+        boolean b = user.getPassport() != null;
+        return b;
     }
 }

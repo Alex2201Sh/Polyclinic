@@ -15,10 +15,15 @@
 
         <#if isRegisterForm>
             <div class="form-group row">
+                <label class="col-sm-2 col-form-label">email:</label>
+                <div class="col-sm-6">
+                    <input type="email" name="email" class="form-control" placeholder="email"/>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Номер телефона:</label>
                 <div class="col-sm-6">
-                    <input type="tel" name="phoneNumber" class="form-control" placeholder="Новый номер телефона"
-                           value="${phoneNumber!''}"/>
+                    <input type="tel" name="phoneNumber" class="form-control" placeholder="номер телефона"/>
                 </div>
             </div>
         </#if>

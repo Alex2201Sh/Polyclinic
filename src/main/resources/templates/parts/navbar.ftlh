@@ -13,7 +13,7 @@
         <ul class="navbar-nav mr-auto">
             <#if isAdmin>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user">Список пользователей</a>
+                    <a class="nav-link" href="/admin">Панель администратора</a>
                 </li>
             </#if>
             <#if user??>

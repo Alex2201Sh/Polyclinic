@@ -1,55 +1,35 @@
 package by.it_academy.polyclinic.controller;
 
-import by.it_academy.polyclinic.model.Role;
 import by.it_academy.polyclinic.model.User;
 import by.it_academy.polyclinic.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
     private UserService userService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping
-    public String index(Model model) {
-        model.addAttribute("users", userService.findAll());
-        return "userList";
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("{user}")
-    public String userEditForm(@PathVariable User user, Model model) {
-        model.addAttribute("user", user);
-        model.addAttribute("roles", Role.values());
-        return "userEdit";
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping
-    public String userSave(
-            @RequestParam String username,
-            @RequestParam Map<String, String> form,
-            @RequestParam("userId") User user) {
-
-        userService.saveUser(user, username, form);
-        return "redirect:/user";
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("profile")
     public String getProfile(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("email", user.getEmail());
-
+        User userFromDb = (User) userService.loadUserByUsername(user.getUsername());
+        model.addAttribute("username", userFromDb.getUsername());
+        model.addAttribute("email", userFromDb.getEmail());
+        model.addAttribute("phoneNumber", userFromDb.getPhoneNumber());
+        model.addAttribute("password", userFromDb.getPassword());
+        model.addAttribute("passport", userFromDb.getPassport());
         return "profile";
     }
 
@@ -58,16 +38,8 @@ public class UserController {
                                 @RequestParam String password,
                                 @RequestParam String email,
                                 @RequestParam String phoneNumber) {
-
-        userService.updateProfile(user, password, email, phoneNumber);
+        userService.updateProfile(user, user.getUsername(), password, email, phoneNumber);
         return "redirect:/user/profile";
     }
-
-//    @PreAuthorize("hasAuthority('ADMIN')")
-//    @PostMapping("profile")
-//    public String delete(@PathVariable("id") Long id) {
-//        userService.delete(id);
-//        return "redirect:/users";
-//    }
 
 }

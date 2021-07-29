@@ -1,18 +1,49 @@
 package by.it_academy.polyclinic.model;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
 
-@Entity(name = "Passport")
+@Entity
 @Table(name = "passports")
-public class Passport {
+public class Passport implements Serializable {
 
     @Id
-    @NotNull
-    private String id; //идентификационный номер пасспорта
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPersonalNo() {
+        return personalNo;
+    }
+
+    public void setPersonalNo(String personalNo) {
+        this.personalNo = personalNo;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Column(name = "personal_no", nullable = true, unique = true)
+    private String personalNo;
+
+    @OneToOne(mappedBy = "passport")
+    private User user;
 
     @NotEmpty(message = "Name should not be empty")
     @Size(min = 2, max = 30, message = "Name 2..30 chars")
@@ -28,23 +59,15 @@ public class Passport {
 
     private String nationality; // национальность
 
-    private String birthDate; // дата рождения
+    private LocalDate birthDate; // дата рождения
 
     private String birthPlace; // место рождения
 
     private String sex; // пол
 
-    private String dateOfIssue; // дата выдачи пасспорта
+    private LocalDate dateOfIssue; // дата выдачи пасспорта
 
-    private String dateOfExpiry; //окончание срока действия пасспорта
-
-    public String getId() {
-        return id;
-    }
-
-    public void setIdNumber(String id) {
-        this.id = id;
-    }
+    private LocalDate dateOfExpiry; //окончание срока действия пасспорта
 
     public String getCodeOfIssuingState() {
         return codeOfIssuingState;
@@ -70,11 +93,11 @@ public class Passport {
         this.nationality = nationality;
     }
 
-    public String getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -94,19 +117,19 @@ public class Passport {
         this.sex = sex;
     }
 
-    public String getDateOfIssue() {
+    public LocalDate getDateOfIssue() {
         return dateOfIssue;
     }
 
-    public void setDateOfIssue(String dateOfIssue) {
+    public void setDateOfIssue(LocalDate dateOfIssue) {
         this.dateOfIssue = dateOfIssue;
     }
 
-    public String getDateOfExpiry() {
+    public LocalDate getDateOfExpiry() {
         return dateOfExpiry;
     }
 
-    public void setDateOfExpiry(String dateOfExpiry) {
+    public void setDateOfExpiry(LocalDate dateOfExpiry) {
         this.dateOfExpiry = dateOfExpiry;
     }
 
@@ -135,5 +158,9 @@ public class Passport {
     }
 
     public Passport() {
+    }
+
+    public boolean isPassportHasOwner(Passport passport) {
+        return passport.getUser() != null;
     }
 }
