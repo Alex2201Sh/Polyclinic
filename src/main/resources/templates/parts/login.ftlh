@@ -33,6 +33,12 @@
             <#if isRegisterForm>Создать<#else>Войти</#if>
         </button>
 
+        <div class="container unauthenticated">
+            <div>
+                With Google: <a href="/oauth2/authorization/google">click here</a>
+            </div>
+        </div>
+
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 
     </form>

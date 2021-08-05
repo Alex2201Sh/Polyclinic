@@ -2,13 +2,13 @@
 
 <@c.page>
     <h5>passport/profile</h5>
-    <h5>${passportId!''}</h5>
+    <h5>${personalNo!''}</h5>
     <form method="post">
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Идентификационный номер пасспорта:</label>
+            <label class="col-sm-2 col-form-label">Личный номер пасспорта:</label>
             <div class="col-sm-6">
-                <input type="text" name="passportId" class="form-control" placeholder="Идентификационный номер"
-                       value="${passportId!''}"/>
+                <input type="text" name="personalNo" class="form-control" placeholder="Личный номер"
+                       value="${personalNo!''}"/>
             </div>
         </div>
         <div class="form-group row">

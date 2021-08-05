@@ -7,35 +7,11 @@
     <br>
     <form action="/admin/users" method="post">
         <input type="text" name="username" value="${user.username}">
-
-        <#--        <#list roles as role>-->
-        <#--            <div class="list_group">-->
-        <#--                <label class="list-group-item">-->
-        <#--                    <input class="form-check-input" type="radio" ${user.role?contains(role)?string("checked", "")}>-->
-        <#--                    ${role}-->
-        <#--                </label>-->
-        <#--            </div>-->
-        <#--        </#list>-->
-
-        <#--        <#list roles as role>-->
-        <#--            <div>-->
-        <#--                <label><input type="checkbox"-->
-        <#--                              name="${role}" ${user.role?contains(role)?string("checked", "")}>${role}</label>-->
-        <#--            </div>-->
-        <#--            <div class="form-check">-->
-        <#--                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"-->
-        <#--                        ${user.role?contains(role)?string("checked", "")}>-->
-        <#--                <label class="form-check-label" for="flexRadioDefault2">-->
-        <#--                    ${role}-->
-        <#--                </label>-->
-        <#--            </div>-->
-        <#--        </#list>-->
-
         <div>
             <input type="text" name="role" value="${user.role}"><label>role</label>
         </div>
         <div>
-            <input type="text" name="password" value="${user.password}"><label>password</label>
+            <input type="text" name="password" placeholder="новый пароль"><label>password</label>
         </div>
         <div>
             <input type="email" name="email" value="${user.email!''}"><label>email</label>
@@ -59,3 +35,28 @@
     </form>
 
 </@c.page>
+
+
+
+<#--        <#list roles as role>-->
+<#--            <div class="list_group">-->
+<#--                <label class="list-group-item">-->
+<#--                    <input class="form-check-input" type="radio" ${user.role?contains(role)?string("checked", "")}>-->
+<#--                    ${role}-->
+<#--                </label>-->
+<#--            </div>-->
+<#--        </#list>-->
+
+<#--        <#list roles as role>-->
+<#--            <div>-->
+<#--                <label><input type="checkbox"-->
+<#--                              name="${role}" ${user.role?contains(role)?string("checked", "")}>${role}</label>-->
+<#--            </div>-->
+<#--            <div class="form-check">-->
+<#--                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"-->
+<#--                        ${user.role?contains(role)?string("checked", "")}>-->
+<#--                <label class="form-check-label" for="flexRadioDefault2">-->
+<#--                    ${role}-->
+<#--                </label>-->
+<#--            </div>-->
+<#--        </#list>-->

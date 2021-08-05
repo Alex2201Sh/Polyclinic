@@ -2,6 +2,7 @@ package by.it_academy.polyclinic.service.api;
 
 import by.it_academy.polyclinic.model.Passport;
 import by.it_academy.polyclinic.model.User;
+import by.it_academy.polyclinic.model.enumeration.Role;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,8 @@ public interface IUserService extends UserDetailsService {
     void deletePassport(User user);
 
     User loadUserByPassportId(Long id);
+
+    List<User> findUsersByRole(Role role);
 
 
 }

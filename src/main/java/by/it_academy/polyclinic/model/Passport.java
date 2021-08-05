@@ -1,5 +1,7 @@
 package by.it_academy.polyclinic.model;
 
+import by.it_academy.polyclinic.model.enumeration.Role;
+import by.it_academy.polyclinic.model.enumeration.Sex;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
@@ -14,30 +16,6 @@ public class Passport implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getPersonalNo() {
-        return personalNo;
-    }
-
-    public void setPersonalNo(String personalNo) {
-        this.personalNo = personalNo;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     @Column(name = "personal_no", nullable = true, unique = true)
     private String personalNo;
@@ -63,7 +41,9 @@ public class Passport implements Serializable {
 
     private String birthPlace; // место рождения
 
-    private String sex; // пол
+    @Column(name = "sex", nullable = true)
+    @Enumerated(EnumType.STRING)
+    private Sex sex;
 
     private LocalDate dateOfIssue; // дата выдачи пасспорта
 
@@ -109,11 +89,11 @@ public class Passport implements Serializable {
         this.birthPlace = birthPlace;
     }
 
-    public String getSex() {
+    public Sex getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(Sex sex) {
         this.sex = sex;
     }
 
@@ -155,6 +135,30 @@ public class Passport implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPersonalNo() {
+        return personalNo;
+    }
+
+    public void setPersonalNo(String personalNo) {
+        this.personalNo = personalNo;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Passport() {

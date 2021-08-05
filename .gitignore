@@ -148,3 +148,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,windows,maven
+/client_secret_264833745666-tuf7pbu5ijmedem9ldt7eah1k3vveqs9.apps.googleusercontent.com.json

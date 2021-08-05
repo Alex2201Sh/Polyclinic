@@ -1,30 +1,29 @@
 package by.it_academy.polyclinic.model;
 
+import by.it_academy.polyclinic.model.enumeration.Department;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Entity
-@Table(name = "medical_cards")
-public class MedicalCard implements Serializable {
+public class Doctor implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer healthStatus;
-
-    @OneToOne(mappedBy = "medicalCard")
+    @OneToOne(mappedBy = "doctor")
     private User user;
+
+    @Column(name = "department", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Department department;
+
+    private String position;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "medicalCard", cascade = CascadeType.ALL)
     private List<Treatment> treatments;
-
-    public MedicalCard() {
-    }
 
     public Long getId() {
         return id;
@@ -34,20 +33,28 @@ public class MedicalCard implements Serializable {
         this.id = id;
     }
 
-    public Integer getHealthStatus() {
-        return healthStatus;
-    }
-
-    public void setHealthStatus(Integer healthStatus) {
-        this.healthStatus = healthStatus;
-    }
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String description) {
+        this.position = description;
     }
 
     public List<Treatment> getTreatments() {

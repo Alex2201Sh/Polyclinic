@@ -1,34 +1,50 @@
 package by.it_academy.polyclinic.controller;
 
-import by.it_academy.polyclinic.model.User;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import by.it_academy.polyclinic.model.enumeration.InfoType;
+import by.it_academy.polyclinic.repositories.InformationRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Map;
 
 @Controller
 public class MainController {
 
+    private InformationRepository informationRepository;
+
+    public MainController(InformationRepository informationRepository) {
+        this.informationRepository = informationRepository;
+    }
+
     @GetMapping("/")
-    public String greeting(Map<String, Object> model) {
+    public String greeting(Model model) {
         return "greeting";
     }
 
-    @GetMapping("/main")
-    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
-        return "main";
+    @GetMapping("/info")
+    public String infoPage(Model model) {
+        model.addAttribute("informations", informationRepository.findByInfoType(InfoType.POLYCLINIC_INFO));
+        return "infoAndNews";
     }
 
-    @PostMapping("/main")
-    public String add(
-            @AuthenticationPrincipal User user,
-            @RequestParam String text,
-            @RequestParam String tag, Map<String, Object> model
-    ) {
-        return "main";
+    @GetMapping("/news")
+    public String newsPage(Model model) {
+        model.addAttribute("informations", informationRepository.findByInfoType(InfoType.NEWS));
+        return "infoAndNews";
     }
+
+    @GetMapping("/useful")
+    public String usefulInfoPage(Model model) {
+        model.addAttribute("informations", informationRepository.findByInfoType(InfoType.USEFUL_INFO));
+        return "infoAndNews";
+    }
+
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PostMapping("/main")
+//    public String add(@RequestParam String text,
+//                      @RequestParam String tag, Model model) {
+//        model.addAttribute("text", text);
+//        model.addAttribute("tag", tag);
+//        informationRepository.save(new Information(text, tag));
+//        return "main";
+//    }
 }

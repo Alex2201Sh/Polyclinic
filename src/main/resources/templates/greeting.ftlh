@@ -9,15 +9,7 @@
         <a href="/login">Войти</a>
         <br>
         <a href="/registration">Добавить пользователя</a>
+        <br>
     </#if>
-
-    <div class="col-4 ml-auto mr-3" style="height: 30px;"></div>
-
-    <h5>
-        Какие-то
-        новости
-        //TODO
-    </h5>
-
 
 </@c.page>

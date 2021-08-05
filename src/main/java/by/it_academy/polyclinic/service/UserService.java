@@ -2,10 +2,12 @@ package by.it_academy.polyclinic.service;
 
 import by.it_academy.polyclinic.model.Passport;
 import by.it_academy.polyclinic.model.User;
-import by.it_academy.polyclinic.repositories.MediaclCardRepository;
+import by.it_academy.polyclinic.model.enumeration.Role;
+import by.it_academy.polyclinic.repositories.MedicalCardRepository;
 import by.it_academy.polyclinic.repositories.PassportRepository;
 import by.it_academy.polyclinic.repositories.UserRepository;
 import by.it_academy.polyclinic.service.api.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,13 +25,14 @@ public class UserService implements UserDetailsService, IUserService {
     private PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
     private PassportRepository passportRepository;
-    private MediaclCardRepository mediaclCardRepository;
+    private MedicalCardRepository medicalCardRepository;
 
-    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, PassportRepository passportRepository, MediaclCardRepository mediaclCardRepository) {
+    @Autowired
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, PassportRepository passportRepository, MedicalCardRepository medicalCardRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.passportRepository = passportRepository;
-        this.mediaclCardRepository = mediaclCardRepository;
+        this.medicalCardRepository = medicalCardRepository;
     }
 
     public boolean addUser(String username, String password, String email, String phone) {
@@ -46,14 +49,14 @@ public class UserService implements UserDetailsService, IUserService {
             user.setPhoneNumber(phone);
         }
         user.setRole(GUEST);
-        user.setPassword(password);
+//        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
 
 
 //        user.setPassword(passwordEncoder.encode(user.getPassword()));
 // TODO ШИФРОВАНИЕ. Раскомментить для шифрования пароля при добавлении пользователя
 // Для зашифровки уже сохранённых паролей выполнить в базе данных команды:
-// create extension if not exists pgcrypto;
-// update users set password = crypt(password, gen_salt('bf',8));
+
 
         userRepository.save(user);
 
@@ -78,7 +81,7 @@ public class UserService implements UserDetailsService, IUserService {
     @Override
     public void updateProfile(User user, String username, String password, String email, String phoneNumber) {
         if (!StringUtils.isEmpty(password)) {
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password));
         }
         if (!StringUtils.isEmpty(email)) {
             user.setEmail(email);
@@ -116,4 +119,11 @@ public class UserService implements UserDetailsService, IUserService {
     public User loadUserByPassportId(Long id) {
         return userRepository.findByPassportId(id);
     }
+
+    @Override
+    public List<User> findUsersByRole(Role role) {
+        return userRepository.findUsersByRole(role);
+    }
+
+
 }

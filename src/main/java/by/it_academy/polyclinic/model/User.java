@@ -14,9 +14,12 @@ import java.util.Objects;
 @Table(name = "users")
 public class User implements UserDetails {
 
+    private static final long serialVersionUID = 1176643883350150441L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
@@ -30,6 +33,10 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "passport_id", foreignKey = @ForeignKey(name = "FK_user_passport_id"))
     private Passport passport;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "doctor_id", foreignKey = @ForeignKey(name = "FK_user_doctor_id"))
+    private Doctor doctor;
 
     @Email
     @Column(name = "email", unique = true, nullable = true)
@@ -163,9 +170,25 @@ public class User implements UserDetails {
     public boolean isAdmin() {
         return role.equals(Role.ADMIN);
     }
+    public boolean isUserADoctor() {
+        return role.equals(Role.DOCTOR);
+    }
 
     public boolean isUserHasPassport(User user) {
         boolean b = user.getPassport() != null;
         return b;
+    }
+
+    public boolean isUserHasMedicalCard(User user) {
+        boolean b = user.getMedicalCard() != null;
+        return b;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 }

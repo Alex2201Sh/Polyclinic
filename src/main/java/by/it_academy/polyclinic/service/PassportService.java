@@ -2,9 +2,11 @@ package by.it_academy.polyclinic.service;
 
 import by.it_academy.polyclinic.model.Passport;
 import by.it_academy.polyclinic.model.User;
+import by.it_academy.polyclinic.model.enumeration.Sex;
 import by.it_academy.polyclinic.repositories.PassportRepository;
 import by.it_academy.polyclinic.repositories.UserRepository;
 import by.it_academy.polyclinic.service.api.IPassportService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -19,6 +21,7 @@ public class PassportService implements IPassportService {
     private UserService userService;
     private UserRepository userRepository;
 
+    @Autowired
     public PassportService(PassportRepository passportRepository, UserService userService, UserRepository userRepository) {
         this.passportRepository = passportRepository;
         this.userService = userService;
@@ -62,7 +65,7 @@ public class PassportService implements IPassportService {
     public void updatePassport(Passport passport, String personalNo, String firstName, String surname,
                                LocalDate birthDate, String birthPlace, String address,
                                LocalDate dateOfIssue, LocalDate dateOfExpiry, String codeOFIssuingState,
-                               String nationality, String passportNumber, String sex) {
+                               String nationality, String passportNumber, Sex sex) {
         if (!StringUtils.isEmpty(personalNo)) {
             passport.setPersonalNo(personalNo);
         }
@@ -102,9 +105,8 @@ public class PassportService implements IPassportService {
         passportRepository.save(passport);
     }
 
-    @Override
-    public void delete(Long id) {
-        //TODO
+    public void updatePassport(Passport passport) {
+        passportRepository.save(passport);
     }
 
     @Override
@@ -112,4 +114,8 @@ public class PassportService implements IPassportService {
         return passportRepository.findById(id);
     }
 
+    @Override
+    public Passport loadPassportBySurname(String surname) {
+        return passportRepository.findPassportBySurname(surname);
+    }
 }

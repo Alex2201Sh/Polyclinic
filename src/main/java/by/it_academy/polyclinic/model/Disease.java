@@ -1,16 +1,22 @@
 package by.it_academy.polyclinic.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
-@Entity(name = "Disease")
+@Entity
 @Table(name = "diseases")
-public class Disease {
+public class Disease implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
+
+    @Column(name = "description", length = 999)
     private String description;
+
+    @OneToOne(mappedBy = "disease")
+    private Treatment treatment;
 
     public Long getId() {
         return id;

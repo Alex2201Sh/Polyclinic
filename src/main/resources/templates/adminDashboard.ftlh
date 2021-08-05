@@ -7,6 +7,8 @@
         <a href="/admin/users">Список пользователей</a>
         <br>
         <a href="/admin/passports">Список пасспортов</a>
+        <br>
+        <a href="/admin/diseases">Список заболеваний</a>
     </#if>
 
 </@c.page>
