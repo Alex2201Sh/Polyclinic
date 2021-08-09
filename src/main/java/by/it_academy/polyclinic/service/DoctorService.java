@@ -27,8 +27,9 @@ public class DoctorService implements IDoctorService {
 
     @Override
     public boolean addDoctor(Doctor doctor) {
-        Doctor doctorFromDb = doctorRepository.findById(doctor.getId()).get();
-        if (doctorFromDb != null) {
+
+//        Doctor doctorFromDb = doctorRepository.findById(doctor.getId()).get();
+        if (doctor.getId() != null) {
             return false;
         }
         doctorRepository.save(doctor);

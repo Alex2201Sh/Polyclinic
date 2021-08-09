@@ -1,5 +1,6 @@
 package by.it_academy.polyclinic.service;
 
+import by.it_academy.polyclinic.model.Disease;
 import by.it_academy.polyclinic.model.Passport;
 import by.it_academy.polyclinic.model.User;
 import by.it_academy.polyclinic.model.enumeration.Sex;
@@ -7,6 +8,8 @@ import by.it_academy.polyclinic.repositories.PassportRepository;
 import by.it_academy.polyclinic.repositories.UserRepository;
 import by.it_academy.polyclinic.service.api.IPassportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -117,5 +120,10 @@ public class PassportService implements IPassportService {
     @Override
     public Passport loadPassportBySurname(String surname) {
         return passportRepository.findPassportBySurname(surname);
+    }
+
+    @Override
+    public Page<Passport> findAll(Pageable pageable) {
+        return passportRepository.findAll(pageable);
     }
 }

@@ -2,6 +2,8 @@ package by.it_academy.polyclinic.model;
 
 import by.it_academy.polyclinic.model.enumeration.Role;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,8 +20,6 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
@@ -42,7 +42,8 @@ public class User implements UserDetails {
     @Column(name = "email", unique = true, nullable = true)
     private String email;
 
-    @Column(name = "phone_no", unique = true)
+    @Column(name = "phone_no", unique = true, nullable = true)
+    @Size(min = 2, max = 30, message = "Name 2..30 chars")
     private String phoneNumber;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -170,14 +171,24 @@ public class User implements UserDetails {
     public boolean isAdmin() {
         return role.equals(Role.ADMIN);
     }
+
     public boolean isUserADoctor() {
         return role.equals(Role.DOCTOR);
+    }
+
+    public boolean isUserHasDoctorRole(User user) {
+        return user.getRole()==(Role.DOCTOR);
     }
 
     public boolean isUserHasPassport(User user) {
         boolean b = user.getPassport() != null;
         return b;
     }
+
+    public boolean isUserHasNullUsername(User user) {
+        return user.getUsername().equals(null);
+    }
+
 
     public boolean isUserHasMedicalCard(User user) {
         boolean b = user.getMedicalCard() != null;

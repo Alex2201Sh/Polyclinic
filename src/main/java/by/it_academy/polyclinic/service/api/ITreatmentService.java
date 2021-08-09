@@ -14,6 +14,7 @@ public interface ITreatmentService  {
     void updateTreatment(Treatment treatment, Disease disease, LocalDate recoverDate);
     List<Treatment> findAll(User user);
     List<Treatment> findByDoctor(Doctor doctor);
+    Treatment loadTreatmentById(Long id);
 }
 
 

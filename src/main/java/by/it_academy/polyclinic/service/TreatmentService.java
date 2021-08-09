@@ -67,7 +67,8 @@ public class TreatmentService implements ITreatmentService {
         return treatmentRepository.findByDoctor(doctor);
     }
 
-    public List<Treatment> findWithoutDoctor() {
-        return treatmentRepository.findByDoctor(null);
+    @Override
+    public Treatment loadTreatmentById(Long id) {
+        return treatmentRepository.findById(id).get();
     }
 }

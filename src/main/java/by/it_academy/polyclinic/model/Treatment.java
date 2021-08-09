@@ -3,10 +3,14 @@ package by.it_academy.polyclinic.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "treatments")
 public class Treatment implements Serializable {
+
+    private static final long serialVersionUID = 5664705725854827389L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,7 +26,6 @@ public class Treatment implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
-
 
     private LocalDate sickDate;
 

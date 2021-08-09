@@ -5,6 +5,8 @@ import by.it_academy.polyclinic.model.MedicalCard;
 import by.it_academy.polyclinic.repositories.DiseaseRepository;
 import by.it_academy.polyclinic.service.api.IDiseaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,11 +44,20 @@ public class DiseaseService implements IDiseaseService {
     }
 
     @Override
-    public Optional<Disease> loadDiseaseById(Long id) {
-        return diseaseRepository.findById(id);
+    public Disease loadDiseaseById(Long id) {
+        return diseaseRepository.findById(id).get();
     }
 
     public Disease findDiseaseByName(String name) {
         return diseaseRepository.findByName(name);
+    }
+
+    public void deleteDisease(Long id) {
+        diseaseRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Disease> findAll(Pageable pageable) {
+        return diseaseRepository.findAll(pageable);
     }
 }

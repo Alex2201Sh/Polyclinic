@@ -81,10 +81,14 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">sex:</label>
-            <div class="col-sm-6">
-                <input type="text" name="sex" class="form-control" placeholder="sex"
-                       value="${sex!''}"/>
+            <label class="col-sm-2 col-form-label">Пол:</label>
+            <div class="col-sm-2">
+                <select class="custom-select" name="sex">
+                    <#list sexValues as sex>
+                        <option <#if sex == passport.sex>selected</#if>
+                                value="${sex}">${sex}</option>
+                    </#list>
+                </select>
             </div>
         </div>
 

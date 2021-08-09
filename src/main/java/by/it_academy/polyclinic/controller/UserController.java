@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
 
     private UserService userService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @GetMapping("profile")
     public String getProfile(Model model, @AuthenticationPrincipal User user) {
@@ -40,28 +41,18 @@ public class UserController {
                                 @RequestParam String password,
                                 @RequestParam String email,
                                 @RequestParam String phoneNumber) {
-        userService.updateProfile(user, user.getUsername(), password, email, phoneNumber);
+        User userFromDb = userService.loadUserById(user.getId());
+        if (!StringUtils.isEmpty(password)) {
+            userFromDb.setPassword(passwordEncoder.encode(password));
+        }
+        if (!StringUtils.isEmpty(email)) {
+            userFromDb.setEmail(email);
+        }
+        if (!StringUtils.isEmpty(phoneNumber)) {
+            userFromDb.setPhoneNumber(phoneNumber);
+        }
+
+        userService.updateProfile(userFromDb);
         return "redirect:/user/profile";
     }
-
-//    @GetMapping("medcard")
-//    public String getTreatments(Model model, @AuthenticationPrincipal User user) {
-//        User userFromDb = (User) userService.loadUserByUsername(user.getUsername());
-//        if (userFromDb.isUserHasMedicalCard(userFromDb)) {
-//            model.addAttribute("medicalCard",userFromDb.getMedicalCard());
-//            model.addAttribute("treatments", userFromDb.getMedicalCard().getTreatments());
-//            return "medcard";
-//        } else return "redirect:/user/profile";
-//    }
-
-//    @PostMapping("profile")
-//    public String updateProfile(@AuthenticationPrincipal User user,
-//                                @RequestParam String password,
-//                                @RequestParam String email,
-//                                @RequestParam String phoneNumber) {
-//        userService.updateProfile(user, user.getUsername(), password, email, phoneNumber);
-//        return "redirect:/user/profile";
-//    }
-
-
 }

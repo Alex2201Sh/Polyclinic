@@ -7,19 +7,25 @@ import by.it_academy.polyclinic.repositories.MedicalCardRepository;
 import by.it_academy.polyclinic.repositories.PassportRepository;
 import by.it_academy.polyclinic.repositories.UserRepository;
 import by.it_academy.polyclinic.service.api.IUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.*;
 
 import static by.it_academy.polyclinic.model.enumeration.Role.GUEST;
 
 @Service
+@Validated
 public class UserService implements UserDetailsService, IUserService {
 
     private PasswordEncoder passwordEncoder;
@@ -49,15 +55,7 @@ public class UserService implements UserDetailsService, IUserService {
             user.setPhoneNumber(phone);
         }
         user.setRole(GUEST);
-//        user.setPassword(password);
         user.setPassword(passwordEncoder.encode(password));
-
-
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-// TODO ШИФРОВАНИЕ. Раскомментить для шифрования пароля при добавлении пользователя
-// Для зашифровки уже сохранённых паролей выполнить в базе данных команды:
-
-
         userRepository.save(user);
 
         return true;
@@ -79,22 +77,11 @@ public class UserService implements UserDetailsService, IUserService {
     }
 
     @Override
-    public void updateProfile(User user, String username, String password, String email, String phoneNumber) {
-        if (!StringUtils.isEmpty(password)) {
-            user.setPassword(passwordEncoder.encode(password));
-        }
-        if (!StringUtils.isEmpty(email)) {
-            user.setEmail(email);
-        }
-        if (!StringUtils.isEmpty(phoneNumber)) {
-            user.setPhoneNumber(phoneNumber);
-        }
-
+    public void updateProfile(@Valid User user) {
         userRepository.save(user);
     }
 
     @Override
-
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
@@ -112,7 +99,6 @@ public class UserService implements UserDetailsService, IUserService {
 
     @Override
     public void deletePassport(User user) {
-
     }
 
     @Override
@@ -125,5 +111,8 @@ public class UserService implements UserDetailsService, IUserService {
         return userRepository.findUsersByRole(role);
     }
 
-
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
 }

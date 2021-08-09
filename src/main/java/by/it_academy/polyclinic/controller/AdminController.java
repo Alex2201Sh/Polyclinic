@@ -7,19 +7,22 @@ import by.it_academy.polyclinic.model.User;
 import by.it_academy.polyclinic.model.enumeration.Department;
 import by.it_academy.polyclinic.model.enumeration.Role;
 import by.it_academy.polyclinic.model.enumeration.Sex;
-import by.it_academy.polyclinic.service.DiseaseService;
-import by.it_academy.polyclinic.service.MedicalCardService;
-import by.it_academy.polyclinic.service.PassportService;
-import by.it_academy.polyclinic.service.UserService;
+import by.it_academy.polyclinic.repositories.DiseaseRepository;
+import by.it_academy.polyclinic.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Optional;
 
 @PreAuthorize("hasAuthority('ADMIN')")
 @Controller
@@ -30,24 +33,37 @@ public class AdminController {
     private PassportService passportService;
     private DiseaseService diseaseService;
     private MedicalCardService medicalCardService;
+    private PasswordEncoder passwordEncoder;
+    private DoctorService doctorService;
 
     @Autowired
-    public AdminController(UserService userService, PassportService passportService, DiseaseService diseaseService, MedicalCardService medicalCardService) {
+    public AdminController(UserService userService, PassportService passportService, DiseaseService diseaseService, MedicalCardService medicalCardService, PasswordEncoder passwordEncoder, DoctorService doctorService) {
         this.userService = userService;
         this.passportService = passportService;
         this.diseaseService = diseaseService;
         this.medicalCardService = medicalCardService;
+        this.passwordEncoder = passwordEncoder;
+        this.doctorService = doctorService;
     }
 
-
     @GetMapping
-    public String AdminDashboard() {
+    public String AdminDashboard(Model model) {
+        model.addAttribute("users", userService.findAll());
+        model.addAttribute("passports", passportService.findAll());
+        model.addAttribute("doctors", userService.findUsersByRole(Role.DOCTOR));
+        model.addAttribute("diseases", diseaseService.findAll());
+
         return "adminDashboard";
     }
 
     @GetMapping("users")
-    public String showAllUsers(Model model) {
-        model.addAttribute("users", userService.findAll());
+    public String showAllUsers(Model model,
+                               @PageableDefault(sort = {"username"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<User> page;
+        page = userService.findAll(pageable);
+        model.addAttribute("page", page);
+        model.addAttribute("url", "users");
+
         return "userList";
     }
 
@@ -57,24 +73,69 @@ public class AdminController {
         model.addAttribute("username", userFromDb.getUsername());
         model.addAttribute("email", userFromDb.getEmail());
         model.addAttribute("phoneNumber", userFromDb.getPhoneNumber());
-//        model.addAttribute("password", userFromDb.getPassword());
         model.addAttribute("passport", userFromDb.getPassport());
         model.addAttribute("role", userFromDb.getRole());
         model.addAttribute("roles", Role.values());
-        model.addAttribute("user", user);
+        model.addAttribute("user", userFromDb);
         return "userEdit";
     }
 
     @PostMapping("users")
-    public String updateProfile(@RequestParam String username,
-                                @RequestParam String password,
-                                @RequestParam String email,
-                                @RequestParam String phoneNumber,
-                                @RequestParam String role) {
+    public String updateProfile(
+            @RequestParam String username,
+            @RequestParam String password,
+            @RequestParam String email,
+            @RequestParam String phoneNumber,
+            @RequestParam String role,
+            @RequestParam(required = false) String department,
+            @RequestParam(required = false) String position,
+            @RequestParam(required = false) String cabinet,
+            RedirectAttributes redirectAttributes) {
         User userFromDb = (User) userService.loadUserByUsername(username);
-        userFromDb.setRole(Role.valueOf(role));
-        userService.updateProfile(userFromDb, username, password, email, phoneNumber);
-        return "redirect:/admin/users/";
+        if (!StringUtils.isEmpty(password)) {
+            userFromDb.setPassword(passwordEncoder.encode(password));
+        }
+        if (!StringUtils.isEmpty(email)) {
+            userFromDb.setEmail(email);
+        }
+        if (!StringUtils.isEmpty(phoneNumber)) {
+            userFromDb.setPhoneNumber(phoneNumber);
+        }
+        if (!StringUtils.isEmpty(role)) {
+            userFromDb.setRole(Role.valueOf(role));
+        }
+
+        if (role.equals("DOCTOR")) {
+            if (userFromDb.getDoctor() != null) {
+                Doctor doctor = userFromDb.getDoctor();
+                if (!StringUtils.isEmpty(position)) {
+                    doctor.setPosition(position);
+                }
+                if (!StringUtils.isEmpty(department)) {
+                    doctor.setDepartment(Department.valueOf(department));
+                }
+                if (!StringUtils.isEmpty(cabinet)) {
+                    doctor.setCabinet(cabinet);
+                }
+                doctorService.updateDoctor(doctor);
+            } else {
+                Doctor doctor = new Doctor();
+                if (!StringUtils.isEmpty(position)) {
+                    doctor.setPosition(position);
+                }
+                if (!StringUtils.isEmpty(department)) {
+                    doctor.setDepartment(Department.valueOf(department));
+                }
+                if (!StringUtils.isEmpty(cabinet)) {
+                    doctor.setCabinet(cabinet);
+                }
+                userFromDb.setDoctor(doctor);
+                doctorService.addDoctor(doctor);
+            }
+        }
+        userService.updateProfile(userFromDb);
+        redirectAttributes.addAttribute("id", userFromDb.getId());
+        return "redirect:/admin/users/{id}";
     }
 
     @GetMapping("/users/{user}/delete")
@@ -84,26 +145,17 @@ public class AdminController {
     }
 
     @GetMapping("passports")
-    public String showAllPassports(Model model) {
-        model.addAttribute("passports", passportService.findAll());
-        return "passport/passportList";
+    public String showAllPassports(Model model,
+                                   @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<Passport> page;
+        page = passportService.findAll(pageable);
+        model.addAttribute("page", page);
+        model.addAttribute("url", "passports");
+        return "passportList";
     }
 
     @GetMapping("passports/{passport}")
     public String passportEditForm(@PathVariable Passport passport, Model model) {
-        model.addAttribute("firstName", passport.getFirstName());
-        model.addAttribute("surname", passport.getSurname());
-        model.addAttribute("address", passport.getAddress());
-        model.addAttribute("birthDate", passport.getBirthDate());
-        model.addAttribute("birthPlace", passport.getBirthPlace());
-        model.addAttribute("dateOfIssue", passport.getDateOfIssue());
-        model.addAttribute("dateOfExpiry", passport.getDateOfExpiry());
-        model.addAttribute("codeOfIssuingState", passport.getCodeOfIssuingState());
-        model.addAttribute("nationality", passport.getNationality());
-        model.addAttribute("passportNo", passport.getPassportNumber());
-        model.addAttribute("personal_no", passport.getPersonalNo());
-        model.addAttribute("sex", passport.getSex());
-        model.addAttribute("passportId", passport.getId());
         model.addAttribute("passport", passport);
         return "passport/passportEdit";
     }
@@ -133,8 +185,13 @@ public class AdminController {
     }
 
     @GetMapping("diseases")
-    public String showAllDiseases(Model model) {
-        model.addAttribute("diseases", diseaseService.findAll());
+    public String showAllDiseases(Model model,
+                                  @PageableDefault(sort = {"name"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<Disease> page;
+        page = diseaseService.findAll(pageable);
+        model.addAttribute("page", page);
+        model.addAttribute("url", "diseases");
+//        model.addAttribute("diseases", diseaseService.findAll());
         return "diseaseList";
     }
 
@@ -155,7 +212,7 @@ public class AdminController {
 
     @GetMapping("/diseases/{disease}")
     public String diseaseEditForm(@PathVariable Disease disease, Model model) {
-        Disease diseaseFromDb = diseaseService.loadDiseaseById(disease.getId()).get();
+        Disease diseaseFromDb = diseaseService.loadDiseaseById(disease.getId());
         model.addAttribute("diseaseId", diseaseFromDb.getId().toString());
         model.addAttribute("name", diseaseFromDb.getName());
         model.addAttribute("description", diseaseFromDb.getDescription().trim());
@@ -167,12 +224,17 @@ public class AdminController {
             @RequestParam String diseaseId,
             @RequestParam String name,
             @RequestParam String description) {
-        Disease diseaseFromDb = diseaseService.loadDiseaseById(Long.valueOf(diseaseId)).get();
+        Disease diseaseFromDb = diseaseService.loadDiseaseById(Long.valueOf(diseaseId));
         diseaseFromDb.setName(name);
         diseaseFromDb.setDescription(description.trim());
         diseaseService.updateDisease(diseaseFromDb);
         return "redirect:/admin/diseases";
     }
 
+    @GetMapping("/diseases/{disease}/delete")
+    public String deleteUser(@PathVariable Disease disease) {
+        diseaseService.deleteDisease(disease.getId());
+        return "redirect:/admin/diseases";
 
+    }
 }

@@ -5,12 +5,12 @@
 
 
     <p>
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#doctors"
+        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#doctors"
                 aria-expanded="false" aria-controls="doctors">
             Список врачей
         </button>
     </p>
-    <div class="collapse show" id="doctors">
+    <div class="collapse" id="doctors">
         <div class="card card-body">
 
             <table class="table">
@@ -24,9 +24,9 @@
                 <tbody>
                 <#list doctors as doctor>
                     <tr>
-                        <td>${doctor.passport.surname} </td>
-                        <td>${doctor.getDoctor().department}</td>
-                        <td>${doctor.getDoctor().position}</td>
+                        <td>${doctor.passport.surname!''} </td>
+                        <td>${doctor.getDoctor().department!''}</td>
+                        <td>${doctor.getDoctor().position!''}</td>
                     </tr>
                 </#list>
                 </tbody>
@@ -35,12 +35,12 @@
     </div>
 
     <p>
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#medcard"
+        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#medcard"
                 aria-expanded="false" aria-controls="medcard">
             Медицинская карта (история обращений)
         </button>
     </p>
-    <div class="collapse show" id="medcard">
+    <div class="collapse" id="medcard">
         <div class="card card-body">
 
             <table class="table">

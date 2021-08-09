@@ -8,7 +8,9 @@ known = Session.SPRING_SECURITY_CONTEXT??
     name = user.getUsername()
     isAdmin = user.isAdmin()
     isUserADoctor = user.isUserADoctor()
+    isUserHasDoctorRole = user.isUserHasDoctorRole(user)
     isUserHasPassport = user.isUserHasPassport(user)
+    isUserHasNullUsername = user.isUserHasNullUsername(user)
     >
 <#else>
     <#assign
@@ -16,5 +18,6 @@ known = Session.SPRING_SECURITY_CONTEXT??
     isAdmin = false
     isUserADoctor = false
     isUserHasPassport = false
+    isUserHasNullUsername = true
     >
 </#if>

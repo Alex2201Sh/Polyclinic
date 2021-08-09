@@ -5,13 +5,13 @@
     <form action="/admin/passports" method="post">
         <input type="hidden" value="${passport}" name="passport">
 
-        <input type="text" name="firstName" value="${firstName!''}"><label>firstName</label>
+        <input type="text" name="firstName" value="${passport.firstName!''}" placeholder="введите имя"><label>firstName</label>
         <br>
         <input type="text" name="surname" value="${passport.surname!''}"><label>surname</label>
         <br>
         <input type="text" name="address" value="${passport.address!''}"><label>address</label>
         <br>
-        <input type="date" name="birthDate" value="${birthDate!''}"><label>birthDate</label>
+        <input type="date" name="birthDate" value="${passport.birthDate!''}"><label>birthDate</label>
         <br>
         <input type="text" name="birthPlace" value="${passport.birthPlace!''}"><label>birthPlace</label>
         <br>
@@ -26,9 +26,9 @@
         <br>
         <input type="text" name="passportNumber" value="${passport.passportNumber!''}"><label>passportNumber</label>
         <br>
-        <input type="text" name="personalNo" value="${passport.personalNo}"><label>personalNo</label>
+        <input type="text" name="personalNo" value="${passport.personalNo!''}"><label>personalNo</label>
         <br>
-        <input type="text" name="sex" value="${sex!''}"><label>sex</label>
+        <input type="text" name="sex" value="${passport.sex!''}"><label>sex</label>
         <br>
         <input type="hidden" value="${passport.id}" name="passportId">
 

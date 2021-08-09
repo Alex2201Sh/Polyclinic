@@ -1,6 +1,7 @@
 package by.it_academy.polyclinic.controller;
 
 import by.it_academy.polyclinic.model.Doctor;
+import by.it_academy.polyclinic.model.Talon;
 import by.it_academy.polyclinic.model.Treatment;
 import by.it_academy.polyclinic.model.User;
 import by.it_academy.polyclinic.model.enumeration.Role;
@@ -9,16 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("user")
@@ -30,15 +24,20 @@ public class PatientController {
     private MedicalCardService medicalCardService;
     private TreatmentService treatmentService;
     private DoctorService doctorService;
+    private TalonService talonService;
 
     @Autowired
-    public PatientController(UserService userService, PassportService passportService, DiseaseService diseaseService, MedicalCardService medicalCardService, TreatmentService treatmentService, DoctorService doctorService) {
+    public PatientController(UserService userService, PassportService passportService,
+                             DiseaseService diseaseService, MedicalCardService medicalCardService,
+                             TreatmentService treatmentService, DoctorService doctorService,
+                             TalonService talonService) {
         this.userService = userService;
         this.passportService = passportService;
         this.diseaseService = diseaseService;
         this.medicalCardService = medicalCardService;
         this.treatmentService = treatmentService;
         this.doctorService = doctorService;
+        this.talonService = talonService;
     }
 
 
@@ -53,26 +52,34 @@ public class PatientController {
     }
 
     @GetMapping("/patient/newtreatment")
-    public String addTreatmentForm(@AuthenticationPrincipal User user, Model model) {
-        Treatment treatment = new Treatment();
+    public String addTreatmentForm(@AuthenticationPrincipal User user, Model model,
+                                    @RequestParam(name = "doctor", required = false) Doctor doctor,
+                                    @RequestParam(name = "talon", required = false) Talon talon
 
-        model.addAttribute("treatment", treatment);
+    ) {
         model.addAttribute("doctors", userService.findUsersByRole(Role.DOCTOR));
+        if (doctor != null) {
+            model.addAttribute("doctor", doctor);
+            List<Talon> talons = doctor.getTalons();
+            model.addAttribute("talons", talons);
+        }
         return "treatmentAdd";
     }
 
-    @PostMapping("/patient/newtreatment")
-    public String addTreatment(@AuthenticationPrincipal User user, @RequestParam String sickDate, @RequestParam String doctorSurname) {
-        Treatment treatment = new Treatment();
+    @PostMapping("/patient")
+    public String addTreatment1(@AuthenticationPrincipal User user,
+                                @RequestParam(name = "doctor") String doctor,
+                                @RequestParam(name = "talon") String talon
+    ) {
         User userFromDb = userService.loadUserById(user.getId());
+        Treatment treatment = new Treatment();
+        Doctor doctorFromDb = doctorService.loadDoctorById(Long.valueOf(doctor)).get();
+        Talon talonFromDb = talonService.loadTalonById(Long.valueOf(talon)).get();
+        talonService.deleteTalon(talonFromDb);
+        treatment.setDoctor(doctorFromDb);
         treatment.setMedicalCard(userFromDb.getMedicalCard());
-        treatment.setSickDate(LocalDate.parse(sickDate));
-        if (!StringUtils.isEmpty(doctorSurname)) {
-            treatment.setDoctor(doctorService.loadDoctorBySurname(doctorSurname));
-        } else treatment.setDoctor(null);
+        treatment.setSickDate(talonFromDb.getTalonDate());
         treatmentService.addTreatment(treatment);
         return "redirect:/user/patient";
     }
-
-
 }

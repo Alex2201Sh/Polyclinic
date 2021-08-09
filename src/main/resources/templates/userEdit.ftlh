@@ -3,60 +3,129 @@
 
 
 <@c.page>
-    Редактор пользователя
+
+    <div>
+        <form action="/admin/users" method="get">
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <button class="btn btn-outline-info btn-sm" type="submit">Назад</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <label>
+        <h4>
+            Редактор пользователя
+        </h4>
+    </label>
     <br>
-    <form action="/admin/users" method="post">
-        <input type="text" name="username" value="${user.username}">
-        <div>
-            <input type="text" name="role" value="${user.role}"><label>role</label>
-        </div>
-        <div>
-            <input type="text" name="password" placeholder="новый пароль"><label>password</label>
-        </div>
-        <div>
-            <input type="email" name="email" value="${user.email!''}"><label>email</label>
-        </div>
-        <div>
-            <input type="text" name="phoneNumber" value="${user.phoneNumber!''}"><label>phoneNumber</label>
-        </div>
 
-        <#if user.isUserHasPassport(user)>
-            <input type="text" name="passportId" value="${passport.getId()!''}"><label>passportId</label>
-        </#if>
+    <div>
+        <form action="/admin/users" method="post">
 
-        <input type="hidden" value="${user.id}" name="userId">
-        <input type="hidden" value="${_csrf.token}" name="_csrf">
-        <br>
-        <button type="submit">Сохранить</button>
-    </form>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Логин:</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="username" class="form-control" value="${user.username}"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Роль:</label>
+                            <div class="col-sm-4">
+                                <select class="custom-select" name="role">
+                                    <#list roles as role>
+                                        <option <#if role == user.role>selected</#if>
+                                                value="${role}">${role}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Пароль:</label>
+                            <div class="col-sm-4">
+                                <input type="password" name="password" class="form-control" placeholder="новый пароль"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">email:</label>
+                            <div class="col-sm-4">
+                                <input type="email" name="email" class="form-control" value="${user.email!''}"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Номер телефона:</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="phoneNumber" class="form-control"
+                                       value="${user.phoneNumber!''}"/>
+                            </div>
+                        </div>
 
-    <form action="/admin/users/${user.id}/delete" method="get">
-        <button type="submit">Удалить</button>
-    </form>
+                        <#if user.isUserHasPassport(user)>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">id паспорта:</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="passportId" class="form-control"
+                                           value="${user.passportId!''}"/>
+                                </div>
+                            </div>
+                        </#if>
+
+                        <input type="hidden" value="${user.id}" name="userId">
+
+                        <input type="hidden" value="${_csrf.token}" name="_csrf">
+
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <button class="btn btn-primary" type="submit">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <#if user.isUserHasDoctorRole(user)>
+                        <div class="col">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Отделение:</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="department" class="form-control"
+                                           value="${user.doctor.department!''}"
+                                    />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Должность:</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="position" class="form-control"
+                                           value="${user.doctor.position!''}"
+                                    />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Кабинет:</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="cabinet" class="form-control"
+                                           value="${user.doctor.cabinet!''}"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </#if>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <form action="/admin/users/${user.id}/delete" method="get">
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <button class="btn btn-outline-danger" type="submit">Удалить</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
 </@c.page>
-
-
-
-<#--        <#list roles as role>-->
-<#--            <div class="list_group">-->
-<#--                <label class="list-group-item">-->
-<#--                    <input class="form-check-input" type="radio" ${user.role?contains(role)?string("checked", "")}>-->
-<#--                    ${role}-->
-<#--                </label>-->
-<#--            </div>-->
-<#--        </#list>-->
-
-<#--        <#list roles as role>-->
-<#--            <div>-->
-<#--                <label><input type="checkbox"-->
-<#--                              name="${role}" ${user.role?contains(role)?string("checked", "")}>${role}</label>-->
-<#--            </div>-->
-<#--            <div class="form-check">-->
-<#--                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"-->
-<#--                        ${user.role?contains(role)?string("checked", "")}>-->
-<#--                <label class="form-check-label" for="flexRadioDefault2">-->
-<#--                    ${role}-->
-<#--                </label>-->
-<#--            </div>-->
-<#--        </#list>-->

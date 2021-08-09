@@ -9,6 +9,8 @@ import java.util.List;
 @Entity
 public class Doctor implements Serializable {
 
+    private static final long serialVersionUID = -8663019301894418226L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,14 +18,19 @@ public class Doctor implements Serializable {
     @OneToOne(mappedBy = "doctor")
     private User user;
 
-    @Column(name = "department", nullable = false)
+    @Column(name = "department")
     @Enumerated(EnumType.STRING)
     private Department department;
 
     private String position;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "medicalCard", cascade = CascadeType.ALL)
+    private String cabinet;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Treatment> treatments;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", cascade = CascadeType.ALL)
+    private List<Talon> talons;
 
     public Long getId() {
         return id;
@@ -63,5 +70,21 @@ public class Doctor implements Serializable {
 
     public void setTreatments(List<Treatment> treatments) {
         this.treatments = treatments;
+    }
+
+    public String getCabinet() {
+        return cabinet;
+    }
+
+    public void setCabinet(String cabinet) {
+        this.cabinet = cabinet;
+    }
+
+    public List<Talon> getTalons() {
+        return talons;
+    }
+
+    public void setTalons(List<Talon> talons) {
+        this.talons = talons;
     }
 }

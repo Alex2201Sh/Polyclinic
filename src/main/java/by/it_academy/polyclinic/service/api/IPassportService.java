@@ -1,8 +1,11 @@
 package by.it_academy.polyclinic.service.api;
 
+import by.it_academy.polyclinic.model.Disease;
 import by.it_academy.polyclinic.model.Passport;
 import by.it_academy.polyclinic.model.User;
 import by.it_academy.polyclinic.model.enumeration.Sex;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,4 +32,5 @@ public interface IPassportService {
 
     Passport loadPassportBySurname(String surname);
 
+    Page<Passport> findAll(Pageable pageable);
 }
