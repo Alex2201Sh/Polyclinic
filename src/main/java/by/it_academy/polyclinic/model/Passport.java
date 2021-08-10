@@ -1,6 +1,5 @@
 package by.it_academy.polyclinic.model;
 
-import by.it_academy.polyclinic.model.enumeration.Role;
 import by.it_academy.polyclinic.model.enumeration.Sex;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

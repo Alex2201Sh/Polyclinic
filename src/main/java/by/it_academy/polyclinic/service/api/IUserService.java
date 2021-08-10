@@ -8,9 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 public interface IUserService extends UserDetailsService {

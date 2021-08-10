@@ -1,13 +1,9 @@
 package by.it_academy.polyclinic.controller;
 
-import by.it_academy.polyclinic.model.Disease;
-import by.it_academy.polyclinic.model.Doctor;
-import by.it_academy.polyclinic.model.Passport;
-import by.it_academy.polyclinic.model.User;
+import by.it_academy.polyclinic.model.*;
 import by.it_academy.polyclinic.model.enumeration.Department;
 import by.it_academy.polyclinic.model.enumeration.Role;
 import by.it_academy.polyclinic.model.enumeration.Sex;
-import by.it_academy.polyclinic.repositories.DiseaseRepository;
 import by.it_academy.polyclinic.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @PreAuthorize("hasAuthority('ADMIN')")
 @Controller
@@ -35,15 +33,21 @@ public class AdminController {
     private MedicalCardService medicalCardService;
     private PasswordEncoder passwordEncoder;
     private DoctorService doctorService;
+    private TalonService talonService;
 
     @Autowired
-    public AdminController(UserService userService, PassportService passportService, DiseaseService diseaseService, MedicalCardService medicalCardService, PasswordEncoder passwordEncoder, DoctorService doctorService) {
+    public AdminController(UserService userService, PassportService passportService,
+                           DiseaseService diseaseService,
+                           MedicalCardService medicalCardService,
+                           PasswordEncoder passwordEncoder, DoctorService doctorService,
+                           TalonService talonService) {
         this.userService = userService;
         this.passportService = passportService;
         this.diseaseService = diseaseService;
         this.medicalCardService = medicalCardService;
         this.passwordEncoder = passwordEncoder;
         this.doctorService = doctorService;
+        this.talonService = talonService;
     }
 
     @GetMapping
@@ -53,7 +57,7 @@ public class AdminController {
         model.addAttribute("doctors", userService.findUsersByRole(Role.DOCTOR));
         model.addAttribute("diseases", diseaseService.findAll());
 
-        return "adminDashboard";
+        return "admin/adminDashboard";
     }
 
     @GetMapping("users")
@@ -64,7 +68,7 @@ public class AdminController {
         model.addAttribute("page", page);
         model.addAttribute("url", "users");
 
-        return "userList";
+        return "admin/userList";
     }
 
     @GetMapping("users/{user}")
@@ -77,7 +81,7 @@ public class AdminController {
         model.addAttribute("role", userFromDb.getRole());
         model.addAttribute("roles", Role.values());
         model.addAttribute("user", userFromDb);
-        return "userEdit";
+        return "admin/userEdit";
     }
 
     @PostMapping("users")
@@ -151,7 +155,7 @@ public class AdminController {
         page = passportService.findAll(pageable);
         model.addAttribute("page", page);
         model.addAttribute("url", "passports");
-        return "passportList";
+        return "admin/passportList";
     }
 
     @GetMapping("passports/{passport}")
@@ -192,12 +196,12 @@ public class AdminController {
         model.addAttribute("page", page);
         model.addAttribute("url", "diseases");
 //        model.addAttribute("diseases", diseaseService.findAll());
-        return "diseaseList";
+        return "admin/diseaseList";
     }
 
     @GetMapping("/diseases/add")
     public String addDisease() {
-        return "diseaseAdd";
+        return "disease/diseaseAdd";
     }
 
     @PostMapping("/diseases/add")
@@ -205,7 +209,7 @@ public class AdminController {
 
         if (!diseaseService.addDisease(disease)) {
             model.addAttribute("message", "Disease exists");
-            return "diseaseAdd";
+            return "disease/diseaseAdd";
         }
         return "redirect:/admin/diseases";
     }
@@ -216,7 +220,7 @@ public class AdminController {
         model.addAttribute("diseaseId", diseaseFromDb.getId().toString());
         model.addAttribute("name", diseaseFromDb.getName());
         model.addAttribute("description", diseaseFromDb.getDescription().trim());
-        return "diseaseEdit";
+        return "disease/diseaseEdit";
     }
 
     @PostMapping("diseases")
@@ -236,5 +240,32 @@ public class AdminController {
         diseaseService.deleteDisease(disease.getId());
         return "redirect:/admin/diseases";
 
+    }
+
+    @GetMapping("talons")
+    public String talonsAdd(Model model,
+                            @RequestParam(name = "doctor", required = false) Doctor doctor) {
+        model.addAttribute("doctors", userService.findUsersByRole(Role.DOCTOR));
+        if (doctor != null) {
+            model.addAttribute("doctor", doctor);
+        }
+        return "admin/talonsAdd";
+    }
+
+    @PostMapping("talons")
+    public String talondAdd(@RequestParam(name = "doctor") String doctor,
+                            @RequestParam String date) {
+        Doctor doctorFromDb = doctorService.loadDoctorById(Long.valueOf(doctor)).get();
+        List<Talon> talonList = new ArrayList<>();
+        for (int i = 8; i < 16; i++) {
+            Talon talon = new Talon();
+            talon.setDoctor(doctorFromDb);
+            talon.setTalonDate(LocalDate.parse(date));
+            talon.setTalonTime(i+":00");
+            talonList.add(talon);
+            talonService.addTalon(talon);
+        }
+        doctorFromDb.setTalons(talonList);
+        return "redirect:/admin/users";
     }
 }

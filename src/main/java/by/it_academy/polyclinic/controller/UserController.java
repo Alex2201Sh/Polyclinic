@@ -33,7 +33,8 @@ public class UserController {
         model.addAttribute("email", userFromDb.getEmail());
         model.addAttribute("phoneNumber", userFromDb.getPhoneNumber());
         model.addAttribute("passport", userFromDb.getPassport());
-        return "profile";
+        model.addAttribute("user",userFromDb);
+        return "user/profile";
     }
 
     @PostMapping("profile")

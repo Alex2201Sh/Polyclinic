@@ -1,7 +1,18 @@
-<#import "parts/common.ftlh" as c>
-<#import "parts/pager.ftlh" as p>
+<#import "../parts/common.ftlh" as c>
+<#import "../parts/pager.ftlh" as p>
 
 <@c.page>
+
+    <div>
+        <form action="/admin" method="get">
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <button class="btn btn-outline-info btn-sm" type="submit">Назад</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
     Список пользователей
     <br>
     <#if page.totalPages gt 1>
@@ -47,8 +58,6 @@
                             отделение:${user.doctor.department}
                             <br>
                             должность:${user.doctor.position}
-                        <#else>
-                            <a href="/admin/users/${user.id}">${user.id}</a>
                         </#if>
                     </td>
                     <td></td>

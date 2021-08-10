@@ -1,6 +1,5 @@
 package by.it_academy.polyclinic.service;
 
-import by.it_academy.polyclinic.model.Disease;
 import by.it_academy.polyclinic.model.Passport;
 import by.it_academy.polyclinic.model.User;
 import by.it_academy.polyclinic.model.enumeration.Sex;

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -47,7 +48,9 @@ public class DoctorController {
     }
 
     @GetMapping("/treatment/{treatment}")
-    public String treatmentHandling1(@PathVariable Treatment treatment, Model model) {
+    public String treatmentHandling1(@AuthenticationPrincipal User user,
+                                     @PathVariable Treatment treatment, Model model) {
+        model.addAttribute("doctor", user);
         model.addAttribute("diseases", diseaseService.findAll());
         model.addAttribute("treatment", treatment);
         return "treatmentHandling";
@@ -61,8 +64,11 @@ public class DoctorController {
         Treatment treatmentFromDb = treatmentService.loadTreatmentById(Long.valueOf(treatment));
         treatmentFromDb.getMedicalCard().setHealthStatus(Integer.valueOf(healthStatus));
         Disease diseaseFromDb = diseaseService.loadDiseaseById(Long.valueOf(disease));
-        LocalDate recoverDateParse = LocalDate.parse(recoverDate);
-        treatmentService.updateTreatment(treatmentFromDb,diseaseFromDb,recoverDateParse);
+        LocalDate recoverDateParse = null;
+        if (!StringUtils.isEmpty(recoverDate)) {
+            recoverDateParse = LocalDate.parse(recoverDate);
+        } else recoverDate = null;
+        treatmentService.updateTreatment(treatmentFromDb, diseaseFromDb, recoverDateParse);
         return "redirect:/doctor";
     }
 

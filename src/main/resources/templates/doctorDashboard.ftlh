@@ -58,10 +58,12 @@
                 <tbody>
                 <#list treatments as treatment>
                     <tr>
-                        <td>${treatment.medicalCard.user.passport.surname!''} ${treatment.medicalCard.user.passport.firstName!''}</td>
-                        <td>${treatment.medicalCard.healthStatus!''} %</td>
-                        <td>${treatment.sickDate!''}</td>
-                        <td><a href="/doctor/treatment/${treatment.id}">Лечить</a></td>
+                        <#if treatment.isPatientSickNow(treatment)>
+                            <td>${treatment.medicalCard.user.passport.surname!''} ${treatment.medicalCard.user.passport.firstName!''}</td>
+                            <td>${treatment.medicalCard.healthStatus!''} %</td>
+                            <td>${treatment.sickDate!''}</td>
+                            <td><a href="/doctor/treatment/${treatment.id}">Лечить</a></td>
+                        </#if>
                     </tr>
                 </#list>
                 </tbody>

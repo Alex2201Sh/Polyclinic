@@ -2,10 +2,7 @@ package by.it_academy.polyclinic.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "medical_cards")

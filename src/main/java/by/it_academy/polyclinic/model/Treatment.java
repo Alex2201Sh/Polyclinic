@@ -3,7 +3,6 @@ package by.it_academy.polyclinic.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "treatments")

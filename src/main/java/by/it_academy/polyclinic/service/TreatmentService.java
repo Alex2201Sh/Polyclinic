@@ -2,24 +2,14 @@ package by.it_academy.polyclinic.service;
 
 import by.it_academy.polyclinic.model.*;
 import by.it_academy.polyclinic.repositories.MedicalCardRepository;
-import by.it_academy.polyclinic.repositories.PassportRepository;
 import by.it_academy.polyclinic.repositories.TreatmentRepository;
 import by.it_academy.polyclinic.repositories.UserRepository;
 import by.it_academy.polyclinic.service.api.ITreatmentService;
-import by.it_academy.polyclinic.service.api.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
-
-import static by.it_academy.polyclinic.model.enumeration.Role.GUEST;
 
 @Service
 public class TreatmentService implements ITreatmentService {

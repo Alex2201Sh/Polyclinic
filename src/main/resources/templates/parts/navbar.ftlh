@@ -58,28 +58,18 @@
                 </#if>
 
                 <#if s.isAdmin>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            Кабинет администратора
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/admin/users">Пользователи</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/admin/passports">Справочник паспортов</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/admin/diseases">Справочник заболеваний</a>
-                            </li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">Кабинет <br> администратора</a>
                     </li>
                 </#if>
             </ul>
 
             <div class="navbar-text mr-3">${name}</div>
+
+            <#if s.known>
+                <div class="navbar-text mr-3">${role}</div>
+            </#if>
+
             <#if s.known><@l.logout /></#if>
         </div>
     </div>

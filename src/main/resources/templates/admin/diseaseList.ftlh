@@ -1,8 +1,19 @@
-<#import "parts/common.ftlh" as c>
-<#import "parts/pager.ftlh" as p>
+<#import "../parts/common.ftlh" as c>
+<#import "../parts/pager.ftlh" as p>
 
 
 <@c.page>
+
+    <div>
+        <form action="/admin" method="get">
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <button class="btn btn-outline-info btn-sm" type="submit">Назад</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
     Список заболеваний
     <a href="/admin/diseases/add">Добавить заболевание</a>
     <br>

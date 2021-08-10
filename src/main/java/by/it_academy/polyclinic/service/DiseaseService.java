@@ -1,7 +1,6 @@
 package by.it_academy.polyclinic.service;
 
 import by.it_academy.polyclinic.model.Disease;
-import by.it_academy.polyclinic.model.MedicalCard;
 import by.it_academy.polyclinic.repositories.DiseaseRepository;
 import by.it_academy.polyclinic.service.api.IDiseaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DiseaseService implements IDiseaseService {

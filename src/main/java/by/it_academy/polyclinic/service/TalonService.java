@@ -23,10 +23,6 @@ public class TalonService implements ITalonService {
 
     @Override
     public boolean addTalon(Talon talon) {
-        Talon talonFromDb = talonRepository.findById(talon.getId()).get();
-        if (talonFromDb != null) {
-            return false;
-        }
         talonRepository.save(talon);
         return true;
     }

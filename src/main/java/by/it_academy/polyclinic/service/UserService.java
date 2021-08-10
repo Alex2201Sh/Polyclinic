@@ -17,10 +17,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.*;
+import java.util.List;
 
 import static by.it_academy.polyclinic.model.enumeration.Role.GUEST;
 

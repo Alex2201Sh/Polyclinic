@@ -48,7 +48,7 @@ public class PatientController {
         model.addAttribute("medicalCard", userFromDb.getMedicalCard());
         model.addAttribute("doctors", userService.findUsersByRole(Role.DOCTOR));
         model.addAttribute("treatments", treatments);
-        return "patientDashboard";
+        return "user/patientDashboard";
     }
 
     @GetMapping("/patient/newtreatment")
@@ -58,12 +58,13 @@ public class PatientController {
 
     ) {
         model.addAttribute("doctors", userService.findUsersByRole(Role.DOCTOR));
+        model.addAttribute("ddd", doctorService.findAll());
         if (doctor != null) {
             model.addAttribute("doctor", doctor);
             List<Talon> talons = doctor.getTalons();
             model.addAttribute("talons", talons);
         }
-        return "treatmentAdd";
+        return "user/treatmentAdd";
     }
 
     @PostMapping("/patient")

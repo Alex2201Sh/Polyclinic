@@ -1,6 +1,5 @@
 package by.it_academy.polyclinic.repositories;
 
-import by.it_academy.polyclinic.model.Passport;
 import by.it_academy.polyclinic.model.User;
 import by.it_academy.polyclinic.model.enumeration.Role;
 import org.springframework.data.domain.Page;

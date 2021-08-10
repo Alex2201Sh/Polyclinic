@@ -41,4 +41,12 @@ public class Disease implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public Treatment getTreatment() {
+        return treatment;
+    }
+
+    public void setTreatment(Treatment treatment) {
+        this.treatment = treatment;
+    }
 }

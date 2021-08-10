@@ -13,7 +13,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 
@@ -66,7 +69,7 @@ public class PassportController {
             }
         }
 
-        return "passport/profile";
+        return "passport/passport";
     }
 
     @PostMapping("")
@@ -88,22 +91,7 @@ public class PassportController {
         Passport passport = userFromDb.getPassport();
         passportService.updatePassport(passport, personalNo, firstName, surname, birthDate, birthPlace, address, dateOfIssue,
                 dateOfExpiry, codeOfIssuingState, nationality, passportNumber, sex);
-
         return "redirect:/user/profile";
-    }
-
-    @GetMapping("/add")
-    public String addPassport() {
-        return "passport/passport";
-    }
-
-    @PostMapping("/add")
-    public String addPassportToRepository(Passport passport, Model model) {
-        if (!passportService.addPassport(passport)) {
-            model.addAttribute("message", "Passport exists");
-            return "redirect:/user/passport";
-        }
-        return "redirect:/user/passport";
     }
 
 }

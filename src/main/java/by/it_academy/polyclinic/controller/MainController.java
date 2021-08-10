@@ -37,14 +37,4 @@ public class MainController {
         model.addAttribute("informations", informationRepository.findByInfoType(InfoType.USEFUL_INFO));
         return "infoAndNews";
     }
-
-//    @PreAuthorize("hasAuthority('ADMIN')")
-//    @PostMapping("/main")
-//    public String add(@RequestParam String text,
-//                      @RequestParam String tag, Model model) {
-//        model.addAttribute("text", text);
-//        model.addAttribute("tag", tag);
-//        informationRepository.save(new Information(text, tag));
-//        return "main";
-//    }
 }

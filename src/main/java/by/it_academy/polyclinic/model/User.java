@@ -2,7 +2,6 @@ package by.it_academy.polyclinic.model;
 
 import by.it_academy.polyclinic.model.enumeration.Role;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -186,7 +185,7 @@ public class User implements UserDetails {
     }
 
     public boolean isUserHasNullUsername(User user) {
-        return user.getUsername().equals(null);
+        return user.getUsername() == null;
     }
 
 
