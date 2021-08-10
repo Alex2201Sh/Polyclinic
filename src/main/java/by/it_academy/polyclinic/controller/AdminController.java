@@ -81,6 +81,7 @@ public class AdminController {
         model.addAttribute("role", userFromDb.getRole());
         model.addAttribute("roles", Role.values());
         model.addAttribute("user", userFromDb);
+        model.addAttribute("departments",Department.values());
         return "admin/userEdit";
     }
 
@@ -161,6 +162,7 @@ public class AdminController {
     @GetMapping("passports/{passport}")
     public String passportEditForm(@PathVariable Passport passport, Model model) {
         model.addAttribute("passport", passport);
+        model.addAttribute("sexValues", Sex.values());
         return "passport/passportEdit";
     }
 
@@ -195,7 +197,6 @@ public class AdminController {
         page = diseaseService.findAll(pageable);
         model.addAttribute("page", page);
         model.addAttribute("url", "diseases");
-//        model.addAttribute("diseases", diseaseService.findAll());
         return "admin/diseaseList";
     }
 

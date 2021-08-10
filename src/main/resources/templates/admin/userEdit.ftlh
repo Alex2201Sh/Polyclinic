@@ -63,19 +63,7 @@
                                        value="${user.phoneNumber!''}"/>
                             </div>
                         </div>
-
-                        <#if user.isUserHasPassport(user)>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">id паспорта:</label>
-                                <div class="col-sm-4">
-                                    <input type="text" name="passportId" class="form-control"
-                                           value="${user.passportId!''}"/>
-                                </div>
-                            </div>
-                        </#if>
-
                         <input type="hidden" value="${user.id}" name="userId">
-
                         <input type="hidden" value="${_csrf.token}" name="_csrf">
 
                         <div class="form-group row">
@@ -89,15 +77,18 @@
                         <div class="col">
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Отделение:</label>
-                                <div class="col-sm-4">
-                                    <input type="text" name="department" class="form-control"
-                                           value="${user.doctor.department!''}"
-                                    />
+                                <div class="col-sm-6">
+                                    <select class="custom-select" name="department">
+                                        <#list departments as department>
+                                            <option <#if department == user.doctor.department>selected</#if>
+                                                    value="${department}">${department}</option>
+                                        </#list>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Должность:</label>
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <input type="text" name="position" class="form-control"
                                            value="${user.doctor.position!''}"
                                     />
@@ -117,6 +108,18 @@
             </div>
         </form>
     </div>
+
+    <#if user.isUserHasPassport(user)>
+        <div>
+            <form action="/admin/passports/${passport.id}" method="get">
+                <div class="form-group row">
+                    <div class="col-sm-4">
+                        <button class="btn btn-outline-info btn-sm" type="submit">Редактировать паспорт</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </#if>
 
     <div>
         <form action="/admin/users/${user.id}/delete" method="get">

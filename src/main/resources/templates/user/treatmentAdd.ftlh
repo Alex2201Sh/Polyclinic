@@ -27,12 +27,14 @@
                         </#if>
                     </select>
                 </div>
-                <div>
+                <#if doctor??>
+                    <button type="submit" class="btn btn-light ml-2">Изменить</button>
+                <#else>
                     <button type="submit" class="btn btn-primary ml-2">Далее</button>
-                </div>
+                </#if>
+                <br>
 
             </form>
-
             <#if doctor??>
                 <form method="post" action="/user/patient">
                     <div class="col-sm-6">
@@ -45,7 +47,7 @@
                     </div>
                     <input type="hidden" value="${_csrf.token}" name="_csrf">
                     <input type="hidden" value="${doctor.id}" name="doctor">
-
+                    <br>
                     <div class="form-group row">
                         <div class="col-sm-4">
                             <button class="btn btn-primary" type="submit">Сохранить</button>

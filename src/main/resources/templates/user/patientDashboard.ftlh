@@ -19,6 +19,7 @@
                     <th>Фамилия</th>
                     <th>Отделение</th>
                     <th>Должность</th>
+                    <th>Кабинет</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,11 +28,13 @@
                         <td>${doctor.passport.surname!''} </td>
                         <td>${doctor.getDoctor().department!''}</td>
                         <td>${doctor.getDoctor().position!''}</td>
+                        <td>${doctor.getDoctor().cabinet!''}</td>
                     </tr>
                 </#list>
                 </tbody>
             </table>
         </div>
+        <br>
     </div>
 
     <p>
@@ -42,7 +45,6 @@
     </p>
     <div class="collapse" id="medcard">
         <div class="card card-body">
-
             <table class="table">
                 <thead>
                 <tr>
@@ -77,6 +79,7 @@
                 </tbody>
             </table>
         </div>
+        <br>
     </div>
 
     <form action="/user/patient/newtreatment" method="get">

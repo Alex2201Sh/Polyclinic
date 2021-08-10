@@ -1,8 +1,7 @@
 <#import "../parts/common.ftlh" as c>
 
 <@c.page>
-    <h5>passport/profile</h5>
-    <h5>${personalNo!''}</h5>
+    <h3>Редактор пасспорта</h3>
     <form method="post">
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Личный номер пасспорта:</label>
@@ -25,56 +24,56 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">address:</label>
+            <label class="col-sm-2 col-form-label">Адрес:</label>
             <div class="col-sm-6">
                 <input type="text" name="address" class="form-control" placeholder="address"
                        value="${address!''}"/>
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">birthDate:</label>
+            <label class="col-sm-2 col-form-label">Дата рождения:</label>
             <div class="col-sm-6">
                 <input type="date" name="birthDate" class="form-control" placeholder="birthDate"
                        value="${birthDate!''}"/>
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">birthPlace:</label>
+            <label class="col-sm-2 col-form-label">Место рождения:</label>
             <div class="col-sm-6">
                 <input type="text" name="birthPlace" class="form-control" placeholder="birthPlace"
                        value="${birthPlace!''}"/>
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">codeOfIssuingState:</label>
+            <label class="col-sm-2 col-form-label">Код органа выдавшего паспорт:</label>
             <div class="col-sm-6">
                 <input type="text" name="codeOfIssuingState" class="form-control" placeholder="codeOfIssuingState"
                        value="${codeOfIssuingState!''}"/>
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">dateOfIssue:</label>
+            <label class="col-sm-2 col-form-label">Дата выдачи:</label>
             <div class="col-sm-6">
                 <input type="date" name="dateOfIssue" class="form-control" placeholder="dateOfIssue"
                        value="${dateOfIssue!''}"/>
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">dateOfExpiry:</label>
+            <label class="col-sm-2 col-form-label">Дата истечения срока действия:</label>
             <div class="col-sm-6">
                 <input type="date" name="dateOfExpiry" class="form-control" placeholder="dateOfExpiry"
                        value="${dateOfExpiry!''}"/>
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">nationality:</label>
+            <label class="col-sm-2 col-form-label">Национальность:</label>
             <div class="col-sm-6">
                 <input type="text" name="nationality" class="form-control" placeholder="nationality"
                        value="${nationality!''}"/>
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">passportNumber:</label>
+            <label class="col-sm-2 col-form-label">Номер паспорта:</label>
             <div class="col-sm-6">
                 <input type="text" name="passportNumber" class="form-control" placeholder="passportNumber"
                        value="${passportNumber!''}"/>

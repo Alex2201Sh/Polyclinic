@@ -18,7 +18,7 @@
         <div class="form-group col-md-6">
             <form method="get" action="/admin/talons" class="form-inline">
                 <div class="col-sm-4">
-                    <select class="custom-select" name="doctor">
+                    <select class="custom-select" name="do  1ctor">
                         <#if doctor??>
                             <#list doctors as user>
                                 <option

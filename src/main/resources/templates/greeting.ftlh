@@ -4,8 +4,6 @@
 <@c.page>
 
     <#if !s.known>
-
-
         <div class="container">
             <div class="row">
                 <div class="col">
@@ -30,9 +28,35 @@
                 </div>
             </div>
         </div>
-
-
-
+    <#else>
+        <form action="/info" method="get">
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <button class="btn btn-success" type="submit">Информация о поликлинике</button>
+                </div>
+            </div>
+        </form>
+        <form action="/news" method="get">
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <button class="btn btn-success" type="submit">Новости</button>
+                </div>
+            </div>
+        </form>
+        <form action="/useful" method="get">
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <button class="btn btn-success" type="submit">Полезная информация</button>
+                </div>
+            </div>
+        </form>
+        <form action="/user/profile" method="get">
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <button class="btn btn-success" type="submit">Профиль пользователя</button>
+                </div>
+            </div>
+        </form>
     </#if>
 
 </@c.page>
