@@ -167,10 +167,19 @@ public class AdminController {
     }
 
     @PostMapping("passports")
-    public String passportSave(@RequestParam String passportId, @RequestParam String personalNo, @RequestParam String firstName, @RequestParam String surname,
-                               @RequestParam String birthDate, @RequestParam String birthPlace, @RequestParam String address,
-                               @RequestParam String dateOfIssue, @RequestParam String dateOfExpiry, @RequestParam String codeOfIssuingState,
-                               @RequestParam String nationality, @RequestParam String passportNumber, @RequestParam Sex sex) {
+    public String passportSave(@RequestParam(required = false) String passportId,
+                               @RequestParam(required = false) String personalNo,
+                               @RequestParam(required = false) String firstName,
+                               @RequestParam(required = false) String surname,
+                               @RequestParam(required = false) String birthDate,
+                               @RequestParam(required = false) String birthPlace,
+                               @RequestParam(required = false) String address,
+                               @RequestParam(required = false) String dateOfIssue,
+                               @RequestParam(required = false) String dateOfExpiry,
+                               @RequestParam(required = false) String codeOfIssuingState,
+                               @RequestParam(required = false) String nationality,
+                               @RequestParam(required = false) String passportNumber,
+                               @RequestParam(required = false) Sex sex) {
 
         Passport passportFromDb = passportService.loadPassportById(Long.valueOf(passportId)).get();
         passportFromDb.setFirstName(firstName);
