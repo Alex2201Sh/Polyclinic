@@ -2,6 +2,7 @@ package by.it_academy.polyclinic.config;
 
 import by.it_academy.polyclinic.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,6 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+//@EnableOAuth2Sso
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -48,8 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling()
                 .accessDeniedPage("/access_denied")
                 .and().authorizeRequests()
-                .antMatchers("/login/**","/", "/registration", "/static/**", "/info",
-                        "/news", "/useful").permitAll()
+                .antMatchers("/login**","/login/**","/", "/registration", "/static/**", "/info",
+                        "/news", "/useful","/error**").permitAll()
                 .antMatchers("/oauth_login/**").permitAll()
                 .antMatchers("/user/**").authenticated()
                 .antMatchers("/doctor/**").hasAnyAuthority("DOCTOR","ADMIN")
